@@ -7,6 +7,7 @@ class Task:
         self.X = X
         self.y = y
         self.task = task
+        self.random_state = random_state
         if test_size is not None:
             self.test_size = test_size
             self.validation_method = "train_test_split"

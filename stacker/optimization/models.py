@@ -3,16 +3,18 @@ import xgboost as xgb
 
 from .optimizer.optimizer import HyperoptOptimizer
 from .optimizer.task import Task
+from .optimizer.scorer import Scorer
+from .logging.optimization_logger import OptimizationLogger, VoidLogger
 from .spaces import xgboost, random_forest
 
 
 class XGBoostOptimizer(HyperoptOptimizer):
-    def __init__(self, task: Task, scorer):
+    def __init__(self, task: Task, scorer: Scorer, opt_logger: OptimizationLogger=VoidLogger(None)):
         if task.task == "classification":
             space = xgboost.classification_space()
         else:
             space = xgboost.general_space()
-        super().__init__(xgb.XGBModel(), task, space, scorer)
+        super().__init__(xgb.XGBModel(), task, space, scorer, opt_logger)
 
     def get_prediction(self, model, X):
         return model.predict(X)
@@ -24,14 +26,14 @@ class XGBoostOptimizer(HyperoptOptimizer):
 
 
 class RandomForestOptimizer(HyperoptOptimizer):
-    def __init__(self, task: Task, scorer):
+    def __init__(self, task: Task, scorer: Scorer, opt_logger: OptimizationLogger=VoidLogger(None)):
         if task.task == "classification":
             space = random_forest.classification_space()
             model = ensemble.RandomForestClassifier()
         else:
             space = random_forest.regression_space()
             model = ensemble.RandomForestRegressor()
-        super().__init__(model, task, space, scorer)
+        super().__init__(model, task, space, scorer, opt_logger)
 
     def get_prediction(self, model, X):
         if self.task.task == "classification":

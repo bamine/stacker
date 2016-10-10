@@ -1,23 +1,24 @@
 import numpy as np
-import xgboost as xgb
 import logging
 from sklearn.base import BaseEstimator
-from sklearn import ensemble
-from hyperopt import STATUS_OK, fmin, tpe, STATUS_FAIL, space_eval
+from hyperopt import STATUS_OK, fmin, tpe, space_eval
 
 from ..optimizer.task import Task
-from ..spaces import xgboost, random_forest
+from ..optimizer.result import OptimizationResult
+from ..optimizer.scorer import Scorer
+from ..logging.optimization_logger import OptimizationLogger
 from ..spaces.space import Space
 
 logger = logging.getLogger('optimization')
 
 
 class Optimizer:
-    def __init__(self, model: BaseEstimator, task: Task, space: Space, scorer):
-        self.task = task
-        self.scorer = scorer
-        self.space = space
+    def __init__(self, model: BaseEstimator, task: Task, space: Space, scorer: Scorer, opt_logger: OptimizationLogger):
         self.model = model
+        self.task = task
+        self.space = space
+        self.scorer = scorer
+        self.opt_logger = opt_logger
         self.best = None
 
     def get_prediction(self, model, X):
@@ -43,14 +44,24 @@ class Optimizer:
         self.model.fit(self.task.X_train, self.task.y_train)
         logger.info("Training model done !")
         y_pred = self.get_prediction(self.model, self.task.X_test)
-        score = self.scorer(self.task.y_test, y_pred)
+        score = self.scorer.scoring_function(self.task.y_test, y_pred)
         logger.info("Score = %s", score)
+        result = OptimizationResult(
+            model=str(self.model),
+            parameters=parameters,
+            score=score,
+            scorer_name=self.scorer.name,
+            validation_method=self.task.validation_method,
+            predictions=y_pred.tolist(),
+            random_state=self.task.random_state)
+        self.opt_logger.save(result)
         return {'loss': score, 'status': STATUS_OK}
 
     def score_cv(self, parameters):
         logger.info("Evaluating using %s-fold CV with parameters %s", self.task.kfold.n_folds, parameters)
         self.model.set_params(**parameters)
         scores = []
+        fold_predictions = []
         for i, (train_index, test_index) in enumerate(self.task.kfold):
             logger.info("Starting fold %s ...", i)
             X_train, X_test = self.task.X[train_index], self.task.X[test_index]
@@ -58,12 +69,22 @@ class Optimizer:
             self.model.fit(X_train, y_train)
             logger.info("Training for fold %s done !", i)
             y_pred = self.get_prediction(self.model, X_test)
-            score = self.scorer(y_test, y_pred)
+            fold_predictions.append(y_pred.tolist())
+            score = self.scorer.scoring_function(y_test, y_pred)
             logger.info("Score %s", score)
             scores.append(score)
         logger.info("Cross validation done !")
         mean_score = np.mean(scores)
         logger.info("Mean Score = %s", mean_score)
+        result = OptimizationResult(
+            model=str(self.model),
+            parameters=parameters,
+            score=mean_score,
+            scorer_name=self.scorer.name,
+            validation_method=self.task.validation_method,
+            predictions=fold_predictions,
+            random_state=self.task.random_state)
+        self.opt_logger.save(result)
         return {'loss': mean_score, 'status': STATUS_OK}
 
 
