@@ -13,7 +13,7 @@ def general_space():
         max_delta_step: Uniform(max_delta_step, 0, 10),
         subsample: Uniform(subsample, 0.1, 1),
         colsample_bytree: Uniform(colsample_bytree, 0.1, 1),
-        colsample_bylevel: Uniform(colsample_bylevel, 0.1, 1),
+        colsample_bylevel: Uniform(colsample_bylevel, 0.5, 1),
         reg_alpha: LogUniform(reg_alpha, -5, 5),
         reg_lambda: LogUniform(reg_lambda, -5, 5),
         scale_pos_weight: Uniform(scale_pos_weight, 0, 100),

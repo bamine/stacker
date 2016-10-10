@@ -3,6 +3,7 @@ import unittest
 from sklearn import datasets, metrics
 
 from stacker.optimization.optimizer.task import Task
+from stacker.optimization.optimizer.scorer import Scorer
 from stacker.optimization.models import XGBoostOptimizer, RandomForestOptimizer
 
 
@@ -13,8 +14,8 @@ class TestOptimizers(unittest.TestCase):
         self.X_reg, self.y_reg = datasets.make_regression(random_state=42)
         self.classification_optimizers = [XGBoostOptimizer, RandomForestOptimizer]
         self.regression_optimizers = [XGBoostOptimizer, RandomForestOptimizer]
-        self.class_scorer = lambda y_pred, y_true: 1 - metrics.roc_auc_score(y_pred, y_true)
-        self.reg_scorer = metrics.mean_squared_error
+        self.class_scorer = Scorer("auc_error", lambda y_pred, y_true: 1 - metrics.roc_auc_score(y_pred, y_true))
+        self.reg_scorer = Scorer("mse", metrics.mean_squared_error)
 
         self.classification_task_split = \
             Task("class_split", self.X_class, self.y_class, "classification", test_size=0.1, random_state=42)
