@@ -2,6 +2,11 @@
 Stacker is a library for automating repetitive tasks in a Machine Learning process.
 It is specially thought for competitive Machine Learning.
 # Getting Started
+## Installing package
+To install the package (as well as the requirements)
+```
+pip install git+https://github.com/bamine/stacker.git
+```
 ## Optimization
 Let's start with a toy classification task
 ```python
