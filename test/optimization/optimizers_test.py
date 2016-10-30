@@ -1,10 +1,11 @@
 import os
 import unittest
+
 from sklearn import datasets, metrics
 
-from stacker.optimization.optimizer.task import Task
-from stacker.optimization.optimizer.scorer import Scorer
 from stacker.optimization.optimizers import XGBoostOptimizer, RandomForestOptimizer
+from stacker.optimization.scorer import Scorer
+from stacker.optimization.task import Task
 
 
 class TestOptimizers(unittest.TestCase):
@@ -46,16 +47,16 @@ class TestOptimizers(unittest.TestCase):
         self.assertLess(reg_result_cv['loss'], 1)
 
     def test_rf(self):
-        rf_optimizer = XGBoostOptimizer(self.classification_task_split, self.class_scorer)
+        rf_optimizer = RandomForestOptimizer(self.classification_task_split, self.class_scorer)
         class_result_split = rf_optimizer.score({"max_depth": 5, "n_estimators": 100})
 
-        rf_optimizer = XGBoostOptimizer(self.classification_task_split, self.class_scorer)
+        rf_optimizer = RandomForestOptimizer(self.classification_task_split, self.class_scorer)
         class_result_cv = rf_optimizer.score({"max_depth": 5, "n_estimators": 100})
 
-        rf_optimizer = XGBoostOptimizer(self.classification_task_split, self.reg_scorer)
+        rf_optimizer = RandomForestOptimizer(self.classification_task_split, self.reg_scorer)
         reg_result_split = rf_optimizer.score({"max_depth": 5, "n_estimators": 100})
 
-        rf_optimizer = XGBoostOptimizer(self.classification_task_split, self.reg_scorer)
+        rf_optimizer = RandomForestOptimizer(self.classification_task_split, self.reg_scorer)
         reg_result_cv = rf_optimizer.score({"max_depth": 5, "n_estimators": 100})
 
         self.assertLess(class_result_split['loss'], 0.1)

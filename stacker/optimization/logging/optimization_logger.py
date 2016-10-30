@@ -1,7 +1,5 @@
-import json
-
-from stacker.optimization.optimizer.task import Task
-from stacker.optimization.optimizer.result import OptimizationResult
+from ..optimizer.result import OptimizationResult
+from ..task import Task
 
 
 class OptimizationLogger:

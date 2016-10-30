@@ -1,16 +1,17 @@
-from sklearn import ensemble
-import xgboost as xgb
 from copy import deepcopy
-import numpy as np
 
-from stacker.optimization.parameters.parameter import Parameter
-from .optimizer.optimizer import HyperoptOptimizer
-from .optimizer.task import Task
-from .optimizer.scorer import Scorer
-from .spaces.space import Space
-from .parameters.parameter_distribution import *
-from .logging.optimization_logger import OptimizationLogger
+import numpy as np
+import xgboost as xgb
+from sklearn import ensemble
+
+from ..optimization.parameters.parameter import Parameter
+from ..optimization.scorer import Scorer
+from ..optimization.task import Task
 from .loggers import VoidLogger
+from .logging.optimization_logger import OptimizationLogger
+from .optimizer.optimizer import HyperoptOptimizer
+from .parameters.parameter_distribution import *
+from .spaces.space import Space
 
 
 class XGBoostOptimizer(HyperoptOptimizer):
