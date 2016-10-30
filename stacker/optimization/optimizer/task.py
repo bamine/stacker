@@ -1,4 +1,4 @@
-from sklearn import cross_validation
+from sklearn import model_selection
 
 
 class Task:
@@ -12,15 +12,13 @@ class Task:
             self.test_size = test_size
             self.validation_method = "train_test_split"
             self.X_train, self.X_test, self.y_train, self.y_test = \
-                cross_validation.train_test_split(self.X, self.y, test_size=test_size, random_state=random_state)
+                model_selection.train_test_split(self.X, self.y, test_size=test_size, random_state=random_state)
         elif cv is not None:
             self.validation_method = "cv"
             if task == "regression":
-                self.kfold = \
-                    cross_validation.KFold(self.X.shape[0], n_folds=cv, random_state=random_state)
+                self.kfold = model_selection.KFold(n_splits=cv, random_state=random_state)
             elif task == "classification":
-                self.kfold = \
-                    cross_validation.StratifiedKFold(self.y, n_folds=cv, shuffle=True, random_state=random_state)
+                self.kfold = model_selection.StratifiedKFold(n_splits=cv, shuffle=True, random_state=random_state)
 
     def __str__(self):
         return "Task={0} - type={1} - validation_method={2} - len(X)={3}"\
