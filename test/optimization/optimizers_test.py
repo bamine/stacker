@@ -4,7 +4,7 @@ from sklearn import datasets, metrics
 
 from stacker.optimization.optimizer.task import Task
 from stacker.optimization.optimizer.scorer import Scorer
-from stacker.optimization.models import XGBoostOptimizer, RandomForestOptimizer
+from stacker.optimization.optimizers import XGBoostOptimizer, RandomForestOptimizer
 
 
 class TestOptimizers(unittest.TestCase):
@@ -66,9 +66,11 @@ class TestOptimizers(unittest.TestCase):
     def test_classification_optimization(self):
         for optimizer in self.classification_optimizers:
             opt = optimizer(self.classification_task_split, self.class_scorer)
+            print(opt)
             best = opt.start_optimization(max_evals=5)
             result = opt.score(best)
             self.assertLess(result['loss'], 0.1)
+            print("done !")
 
     def test_regression_optimization(self):
         for optimizer in self.regression_optimizers:
