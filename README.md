@@ -67,3 +67,55 @@ In [16]: optimizer.score(best)
 2016-10-30 20:10:00,228 optimization INFO     Score = 0.0
 Out[16]: {'loss': 0.0, 'status': 'ok'}
 ```
+## Saving progress
+### File Logger
+You can save the progress of the optimization process to flat files in json format, by creating a `FileLogger` object:
+```python
+In [17]: from stacker.optimization.loggers import FileLogger
+In [18]: file_logger = FileLogger(task=task)
+In [19]: optimizer = XGBoostOptimizer(task=task, scorer=scorer, logger=file_logger)
+In [20]: best = optimizer.start_optimization(max_evals=10)
+```
+The optimization progress logs are in a file called `"tast.name".log` which in out case is `my_test_problem.log`. 
+Each line contains a json object which stores useful information.
+```javascript
+{"scorer_name": "auc_error", 
+"score": 0.0, 
+"validation_method": "train_test_split", 
+"predictions": [0.9586731195449829, 0.9586731195449829, ...], 
+"model": "XGBModel(base_score=0.3547331680585909, ...)", 
+"parameters": {"base_score": 0.3547331680585909, "colsample_bylevel": ...}, 
+"task": "my_test_problem", 
+"random_state": 42}
+```
+Predictions (on the holdout set for train-test splits and on each folds for cv validation) are also stored.
+### DB Logger
+You can also store the optimization progress into a database.
+First we create an SQLAlchemy engine object.
+```python
+In [21]: from sqlalchemy import create_engine
+In [22]: engine = create_engine('sqlite:///test.db')
+``` 
+Then we create our `DBLogger` instance:
+```python
+In [23]: from stacker.optimization.loggers import DBLogger
+In [24]: db_logger = DBLogger(task=task, engine=engine)
+In [25]: optimizer = XGBoostOptimizer(task=task, scorer=scorer, opt_logger=db_logger)
+In [26]: best = optimizer.start_optimization(max_evals=10)
+``` 
+We inspect the contents of our database:
+```bash
+sqlite3 test.db
+sqlite> .tables
+my_test_problem_opt_table
+sqlite> select * from my_test_problem_opt_table limit 1;
+task|date_time|model|parameters|score|scorer_name|validation_method|predictions|random_state
+my_test_problem|2016-10-30 21:15:21.338861|XGBModel(base_score=0.4987515735616427, colsample_bylevel=0.9537358268329221,
+     colsample_bytree=0.5540367970123756, gamma=3.9642149376691425,
+     learning_rate=0.060700000000000004, max_delta_step=6.416649245434087,
+     max_depth=39, min_child_weight=8.653862671384827, missing=None,
+     n_estimators=2370, nthread=-1, objective='reg:linear',
+     reg_alpha=17.94451568455059, reg_lambda=4.289513035748907,
+     scale_pos_weight=48.14895822783563, seed=0, silent=True,
+     subsample=0.9218555541314193)|{"base_score": 0.4987515735616427, ...
+```
