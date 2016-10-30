@@ -47,6 +47,7 @@ class Optimizer:
         score = self.scorer.scoring_function(self.task.y_test, y_pred)
         logger.info("Score = %s", score)
         result = OptimizationResult(
+            task=self.task.name,
             model=str(self.model),
             parameters=parameters,
             score=score,

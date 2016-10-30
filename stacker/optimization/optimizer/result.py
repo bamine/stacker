@@ -1,5 +1,6 @@
 class OptimizationResult:
-    def __init__(self, model, parameters, score, scorer_name, validation_method, predictions, random_state):
+    def __init__(self, task, model, parameters, score, scorer_name, validation_method, predictions, random_state):
+        self.task = task
         self.model = model
         self.parameters = parameters
         self.score = score
