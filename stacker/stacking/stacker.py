@@ -1,8 +1,10 @@
-from sklearn.base import BaseEstimator
 from typing import *
-import numpy as np
 
-from ..optimization.optimizer.task import Task
+import numpy as np
+from sklearn.base import BaseEstimator
+
+from stacker.optimization.task import Task
+
 
 class Stacker:
     def __init__(self, task: Task):

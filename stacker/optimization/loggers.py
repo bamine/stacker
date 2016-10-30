@@ -1,13 +1,14 @@
-from .logging.optimization_logger import OptimizationLogger, OptimizationResult
-from .optimizer.task import Task
-from .optimizer.result import OptimizationResult
+import json
+from datetime import datetime
 
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy import MetaData, create_engine
+from sqlalchemy import MetaData
 from sqlalchemy import Table, Column, Integer, String, Float, DateTime
 from sqlalchemy.orm import mapper
-from datetime import datetime
-import json
+from sqlalchemy.orm import scoped_session, sessionmaker
+
+from ..optimization.task import Task
+from .logging.optimization_logger import OptimizationLogger
+from .optimizer.result import OptimizationResult
 
 
 class VoidLogger(OptimizationLogger):

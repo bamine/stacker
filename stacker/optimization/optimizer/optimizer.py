@@ -1,12 +1,13 @@
-import numpy as np
 import logging
-from sklearn.base import BaseEstimator
-from hyperopt import STATUS_OK, fmin, tpe, space_eval
 
-from ..optimizer.task import Task
-from ..optimizer.result import OptimizationResult
-from ..optimizer.scorer import Scorer
+import numpy as np
+from hyperopt import STATUS_OK, fmin, tpe, space_eval
+from sklearn.base import BaseEstimator
+
+from ..scorer import Scorer
+from ..task import Task
 from ..logging.optimization_logger import OptimizationLogger
+from ..optimizer.result import OptimizationResult
 from ..spaces.space import Space
 
 logger = logging.getLogger('optimization')

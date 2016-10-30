@@ -1,15 +1,16 @@
-from stacker.optimization.optimizers import XGBoostOptimizer
-from stacker.optimization.optimizer.scorer import Scorer
-from stacker.optimization.optimizer.task import Task
-from stacker.optimization.optimizer.result import OptimizationResult
-from stacker.optimization.loggers import FileLogger, DBLogger
+import os
+import unittest
 
+import numpy as np
 from sklearn import metrics, datasets
 from sqlalchemy import create_engine
 from sqlalchemy.orm import clear_mappers
-import numpy as np
-import unittest
-import os
+
+from stacker.optimization.loggers import FileLogger, DBLogger
+from stacker.optimization.optimizer.result import OptimizationResult
+from stacker.optimization.optimizers import XGBoostOptimizer
+from stacker.optimization.scorer import Scorer
+from stacker.optimization.task import Task
 
 
 class TestProgressSaver(unittest.TestCase):
