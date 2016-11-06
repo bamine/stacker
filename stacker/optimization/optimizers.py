@@ -62,8 +62,10 @@ class XGBoostOptimizer(HyperoptOptimizer):
         return model.predict(X)
 
     def process_parameters(self, parameters):
-        parameters["max_depth"] = int(parameters["max_depth"])
-        parameters["n_estimators"] = int(parameters["n_estimators"])
+        if "max_depth" in parameters:
+            parameters["max_depth"] = int(parameters["max_depth"])
+        if "n_estimators" in parameters:
+            parameters["n_estimators"] = int(parameters["n_estimators"])
         return parameters
 
 
@@ -121,11 +123,14 @@ class RandomForestOptimizer(HyperoptOptimizer):
             return model.predict(X)
 
     def process_parameters(self, parameters):
-        if parameters["max_depth"] is not None:
+        if "max_depth" in parameters and parameters["max_depth"] is not None:
             parameters["max_depth"] = int(parameters["max_depth"])
-        parameters["n_estimators"] = int(parameters["n_estimators"])
-        parameters["min_samples_split"] = int(parameters["min_samples_split"])
-        parameters["min_samples_leaf"] = int(parameters["min_samples_leaf"])
+        if "n_estimators" in parameters:
+            parameters["n_estimators"] = int(parameters["n_estimators"])
+        if "min_samples_split" in parameters:
+            parameters["min_samples_split"] = int(parameters["min_samples_split"])
+        if "min_samples_leaf" in parameters:
+            parameters["min_samples_leaf"] = int(parameters["min_samples_leaf"])
         return parameters
 
 
