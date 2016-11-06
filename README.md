@@ -1,4 +1,5 @@
 # stacker
+[![Build Status](https://travis-ci.org/bamine/stacker.svg?branch=master)](https://travis-ci.org/bamine/stacker)
 Stacker is a library for automating repetitive tasks in a Machine Learning process.
 It is specially thought for competitive Machine Learning.
 # Getting Started
