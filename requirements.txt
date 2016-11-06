@@ -1,6 +1,6 @@
 stacker
 scikit-learn>=0.18
 SQLAlchemy>=1.0.13
-xgboost>=0.6
+xgboost>=0.6a1
 hyperopt>=0.0.3.dev0
 pymongo>=3.3.0
