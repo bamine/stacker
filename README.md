@@ -1,5 +1,5 @@
 # stacker
-[![Build Status](https://travis-ci.org/bamine/stacker.svg?branch=master)](https://travis-ci.org/bamine/stacker)
+[![Build Status](https://travis-ci.org/bamine/stacker.svg?branch=master)](https://travis-ci.org/bamine/stacker) [![Coverage Status](https://coveralls.io/repos/github/bamine/stacker/badge.svg?branch=master)](https://coveralls.io/github/bamine/stacker?branch=master)
 
 Stacker is a library for automating repetitive tasks in a Machine Learning process.
 It is specially thought for competitive Machine Learning.
