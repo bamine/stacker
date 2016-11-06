@@ -41,8 +41,8 @@ class TestOptimizers(unittest.TestCase):
         xgboost_optimizer = XGBoostOptimizer(self.classification_task_split, self.reg_scorer)
         reg_result_cv = xgboost_optimizer.score({"max_depth": 5, "n_estimators": 100})
 
-        self.assertLess(class_result_split['loss'], 0.1)
-        self.assertLess(class_result_cv['loss'], 0.1)
+        self.assertLess(class_result_split['loss'], 0.2)
+        self.assertLess(class_result_cv['loss'], 0.2)
         self.assertLess(reg_result_split['loss'], 1)
         self.assertLess(reg_result_cv['loss'], 1)
 
@@ -59,26 +59,24 @@ class TestOptimizers(unittest.TestCase):
         rf_optimizer = RandomForestOptimizer(self.classification_task_split, self.reg_scorer)
         reg_result_cv = rf_optimizer.score({"max_depth": 5, "n_estimators": 100})
 
-        self.assertLess(class_result_split['loss'], 0.1)
-        self.assertLess(class_result_cv['loss'], 0.1)
-        self.assertLess(reg_result_split['loss'], 0.1)
-        self.assertLess(reg_result_cv['loss'], 0.1)
+        self.assertLess(class_result_split['loss'], 0.2)
+        self.assertLess(class_result_cv['loss'], 0.2)
+        self.assertLess(reg_result_split['loss'], 0.2)
+        self.assertLess(reg_result_cv['loss'], 0.2)
 
     def test_classification_optimization(self):
         for optimizer in self.classification_optimizers:
             opt = optimizer(self.classification_task_split, self.class_scorer)
-            print(opt)
             best = opt.start_optimization(max_evals=5)
             result = opt.score(best)
-            self.assertLess(result['loss'], 0.1)
-            print("done !")
+            self.assertLess(result['loss'], 0.2)
 
     def test_regression_optimization(self):
         for optimizer in self.regression_optimizers:
             opt = optimizer(self.regression_task_split, self.class_scorer)
             best = opt.start_optimization(max_evals=5)
             result = opt.score(best)
-            self.assertLess(result['loss'], 0.1)
+            self.assertLess(result['loss'], 0.2)
 
 if __name__ == '__main__':
     unittest.main()
